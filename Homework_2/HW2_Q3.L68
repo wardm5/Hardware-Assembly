@@ -1,0 +1,330 @@
+00001000 Starting Address
+Assembler used: EASy68K Editor/Assembler v5.16.01
+Created On: 4/30/2019 9:43:46 PM
+
+00000000                             1  *-----------------------------------------------------------
+00000000                             2  * Title      :  HW 
+00000000                             3  * Written by :  Misha Ward
+00000000                             4  * Date       :  4/28/2019
+00000000                             5  * Description:  Pattern Finder and Cumulative Sum
+00000000                             6  *-----------------------------------------------------------
+00000000  =00006000                  7  start_hw        EQU         $00006000
+00000000  =00008000                  8  end_hw          EQU         $00008000
+00000000  =0000A000                  9  pattern         EQU         $A000   
+00000000  =0000000D                 10  CR              EQU         $0D
+00000000  =0000000A                 11  LF              EQU         $0A
+00000000                            12  
+00001000                            13      ORG         $1000
+00001000                            14  start
+00001000                            15  ************ user input ******************
+00001000  43F9 00001382             16              lea     startMessage,a1  post message to user
+00001006  103C 000E                 17              move.b  #14,d0
+0000100A  4E4F                      18              trap    #15
+0000100C  43F9 0000143E             19              lea     tempValue, a1
+00001012  103C 0005                 20              move.b  #5,D0       recieve user input
+00001016  4E4F                      21              trap    #15 
+00001018  1801                      22              move.b  d1, d4
+0000101A                            23  
+0000101A  B83C 0030                 24      cmp.b   #$30, d4
+0000101E  6600 000E                 25      BNE X1
+00001022  13FC 0000 0000A000        26      MOVE.B  #$00, pattern
+0000102A  6000 012A                 27      bra nextChar
+0000102E  B83C 0031                 28  X1  cmp.b   #$31, d4
+00001032  6600 000E                 29      bne x2 
+00001036  13FC 0010 0000A000        30      MOVE.B  #$10, pattern
+0000103E  6000 0116                 31      bra nextChar
+00001042  B83C 0032                 32  X2  cmp.b   #$32, d4
+00001046  6600 000E                 33      bne x3 
+0000104A  13FC 0020 0000A000        34      MOVE.B  #$20, pattern
+00001052  6000 0102                 35      bra nextChar
+00001056  B83C 0033                 36  X3  cmp.b   #$33, d4
+0000105A  6600 000E                 37      bne x4 
+0000105E  13FC 0030 0000A000        38      MOVE.B  #$30, pattern
+00001066  6000 00EE                 39      bra nextChar
+0000106A  B83C 0034                 40  X4  cmp.b   #$34, d4
+0000106E  6600 000E                 41      bne x5 
+00001072  13FC 0040 0000A000        42      MOVE.B  #$40, pattern
+0000107A  6000 00DA                 43      bra nextChar
+0000107E  B83C 0035                 44  X5  cmp.b   #$35, d4
+00001082  6600 000E                 45      bne x6 
+00001086  13FC 0050 0000A000        46      MOVE.B  #$50, pattern
+0000108E  6000 00C6                 47      bra nextChar
+00001092  B83C 0036                 48  X6  cmp.b   #$36, d4
+00001096  6600 000E                 49      bne x7 
+0000109A  13FC 0060 0000A000        50      MOVE.B  #$60, pattern
+000010A2  6000 00B2                 51      bra nextChar
+000010A6  B83C 0037                 52  X7  cmp.b   #$37, d4
+000010AA  6600 000E                 53      bne x8 
+000010AE  13FC 0070 0000A000        54      MOVE.B  #$70, pattern
+000010B6  6000 009E                 55      bra nextChar
+000010BA  B83C 0038                 56  X8  cmp.b   #$38, d4
+000010BE  6600 000E                 57      bne x9 
+000010C2  13FC 0080 0000A000        58      MOVE.B  #$80, pattern
+000010CA  6000 008A                 59      bra nextChar
+000010CE  B83C 0039                 60  X9  cmp.b   #$39, d4
+000010D2  6600 000E                 61      bne xA 
+000010D6  13FC 0090 0000A000        62      MOVE.B  #$90, pattern
+000010DE  6000 0076                 63      bra nextChar
+000010E2  B83C 0041                 64  XA  cmp.b   #$41, d4
+000010E6  6600 000E                 65      bne xB 
+000010EA  13FC 00A0 0000A000        66      MOVE.B  #$A0, pattern
+000010F2  6000 0062                 67      bra nextChar
+000010F6  B83C 0042                 68  XB  cmp.b   #$42, d4
+000010FA  6600 000E                 69      bne xC 
+000010FE  13FC 00B0 0000A000        70      MOVE.B  #$B0, pattern
+00001106  6000 004E                 71      bra nextChar
+0000110A  B83C 0043                 72  XC  cmp.b   #$43, d4
+0000110E  6600 000E                 73      bne xD 
+00001112  13FC 00C0 0000A000        74      MOVE.B  #$C0, pattern
+0000111A  6000 003A                 75      bra nextChar
+0000111E  B83C 0044                 76  XD  cmp.b   #$44, d4
+00001122  6600 000E                 77      bne xE 
+00001126  13FC 00D0 0000A000        78      MOVE.B  #$D0, pattern
+0000112E  6000 0026                 79      bra nextChar
+00001132  B83C 0045                 80  XE  cmp.b   #$45, d4
+00001136  6600 000E                 81      bne xF 
+0000113A  13FC 00E0 0000A000        82      MOVE.B  #$E0, pattern
+00001142  6000 0012                 83      bra nextChar
+00001146  B83C 0046                 84  XF  cmp.b   #$46, d4 
+0000114A  13FC 00F0 0000A000        85      MOVE.B  #$F0, pattern
+00001152  6000 0002                 86      bra nextChar
+00001156                            87      *simhalt
+00001156                            88  nextChar
+00001156  E90C                      89              lsl.b   #$04, d4            
+00001158  103C 0005                 90              move.b  #5,D0       recieve user input
+0000115C  4E4F                      91              trap    #15 
+0000115E  1801                      92              move.b   d1, d4
+00001160  43F9 000013DF             93              lea     newSpace, a1
+00001166  103C 000E                 94              move.b    #14, d0
+0000116A  4E4F                      95              trap     #15   
+0000116C                            96  
+0000116C  B83C 0030                 97      cmp.b   #$30, d4
+00001170  6600 000E                 98      BNE X11
+00001174  0639 0000 0000A000        99      add.B  #$00, pattern
+0000117C  6000 0116                100      bra startPatterFinding
+00001180  B83C 0031                101  X11  cmp.b   #$31, d4
+00001184  6600 000C                102      bne x22 
+00001188  5239 0000A000            103      add.B  #$01, pattern
+0000118E  6000 0104                104      bra startPatterFinding
+00001192  B83C 0032                105  X22  cmp.b   #$32, d4
+00001196  6600 000C                106      bne x33 
+0000119A  5439 0000A000            107      add.B  #$02, pattern
+000011A0  6000 00F2                108      bra startPatterFinding
+000011A4  B83C 0033                109  X33  cmp.b   #$33, d4
+000011A8  6600 000C                110      bne x44 
+000011AC  5639 0000A000            111      add.B  #$03, pattern
+000011B2  6000 00E0                112      bra startPatterFinding
+000011B6  B83C 0034                113  X44  cmp.b   #$34, d4
+000011BA  6600 000C                114      bne x55 
+000011BE  5839 0000A000            115      add.B  #$04, pattern
+000011C4  6000 00CE                116      bra startPatterFinding
+000011C8  B83C 0035                117  X55  cmp.b   #$35, d4
+000011CC  6600 000C                118      bne x66 
+000011D0  5A39 0000A000            119      add.B  #$05, pattern
+000011D6  6000 00BC                120      bra startPatterFinding
+000011DA  B83C 0036                121  X66  cmp.b   #$36, d4
+000011DE  6600 000C                122      bne x77 
+000011E2  5C39 0000A000            123      add.B  #$06, pattern
+000011E8  6000 00AA                124      bra startPatterFinding
+000011EC  B83C 0037                125  X77  cmp.b   #$37, d4
+000011F0  6600 000C                126      bne x88 
+000011F4  5E39 0000A000            127      add.B  #$07, pattern
+000011FA  6000 0098                128      bra startPatterFinding
+000011FE  B83C 0038                129  X88  cmp.b   #$38, d4
+00001202  6600 000C                130      bne x99 
+00001206  5039 0000A000            131      add.B  #$08, pattern
+0000120C  6000 0086                132      bra startPatterFinding
+00001210  B83C 0039                133  X99  cmp.b   #$39, d4
+00001214  6600 000E                134      bne xAA 
+00001218  0639 0009 0000A000       135      add.B  #$09, pattern
+00001220  6000 0072                136      bra startPatterFinding
+00001224  B83C 0041                137  XAA  cmp.b   #$41, d4
+00001228  6600 000E                138      bne xBB 
+0000122C  0639 000A 0000A000       139      add.B  #$0A, pattern
+00001234  6000 005E                140      bra startPatterFinding
+00001238  B83C 0042                141  XBB  cmp.b   #$42, d4
+0000123C  6600 000E                142      bne xCC 
+00001240  0639 000B 0000A000       143      add.B  #$0B, pattern
+00001248  6000 004A                144      bra startPatterFinding
+0000124C  B83C 0043                145  XCC  cmp.b   #$43, d4
+00001250  6600 000E                146      bne xDD 
+00001254  0639 000C 0000A000       147      add.B  #$0C, pattern
+0000125C  6000 0036                148      bra startPatterFinding
+00001260  B83C 0044                149  XDD  cmp.b   #$44, d4
+00001264  6600 000E                150      bne xEE 
+00001268  0639 000D 0000A000       151      add.B  #$0D, pattern
+00001270  6000 0022                152      bra startPatterFinding
+00001274  B83C 0045                153  XEE  cmp.b   #$45, d4
+00001278  6600 000E                154      bne xFF 
+0000127C  0639 000E 0000A000       155      add.B  #$0E, pattern
+00001284  6000 000E                156      bra startPatterFinding
+00001288  B83C 0046                157  XFF  cmp.b   #$46, d4 
+0000128C  0639 000F 0000A000       158      add.B  #$0F, pattern
+00001294                           159    
+00001294                           160  startPatterFinding
+00001294                           161    *move.b  d6, pattern
+00001294                           162              *d0+0
+00001294                           163            *simhalt
+00001294                           164  ************ pattern finding **************
+00001294                           165          
+00001294                           166  
+00001294                           167              ******MOVE.B      #$FE, pattern    test input
+00001294  11FC 00FE 7005           168              MOVE.B      #$FE, $00007005   test case
+0000129A                           169                                            
+0000129A  41F8 6000                170              lea         start_hw, a0 
+0000129E  3848                     171              movea       a0, a4
+000012A0  43F9 00008000            172              lea         end_hw, a1  
+000012A6  45F9 000013C2            173              lea         addr1, a2 
+000012AC  1039 0000A000            174              move.b      pattern,d0 
+000012B2                           175                
+000012B2  B010                     176  loop        cmp.b       (a0),d0
+000012B4  6700 000C                177              beq         match  
+000012B8  5288                     178              ADDQ.l      #1, a0
+000012BA  B1C9                     179              CMPA.L      a1, a0 
+000012BC  6E00 000E                180              BGT         no_match 
+000012C0  60F0                     181              bra         loop 
+000012C2  23C8 000013C2            182  match       move.l      a0,addr1   real addres
+000012C8  6000 0008                183              bra next
+000012CC  23CC 000013C2            184  no_match    move.l      a4,addr1   error
+000012D2                           185      
+000012D2                           186  next
+000012D2                           187  
+000012D2                           188      *simhalt
+000012D2                           189  
+000012D2                           190  ************ cumulative sum **************
+000012D2  2479 000013C2            191              move.l      addr1, a2   start address
+000012D8  47F9 000013C6            192              lea         Addsum, a3
+000012DE  360B                     193              move.w       a3, d3
+000012E0  363C 0000                194              move.w      #0, d3    * sets addsum temp value to 0
+000012E4                           195              *lea         CarryBit, a4 
+000012E4  2A3C 00000200            196              move.l      #512, d5      * sets d5 to 512
+000012EA  7800                     197              move.l      #0, d4        * sets i = 0
+000012EC  287C 00000000            198              move.l      #0, a4
+000012F2  3C3C 0000                199              move        #0, d6
+000012F6                           200  
+000012F6                           201  loop_2
+000012F6  BA84                     202              cmp.l d4,d5      compare if equal
+000012F8  6700 0044                203              beq    messageSection      if equal, go to message
+000012FC                           204              
+000012FC                           205              
+000012FC  1C12                     206              move.b      (a2), d6 
+000012FE  3E03                     207              move.w      d3, d7
+00001300  D646                     208              add.w       d6, d3     
+00001302  6500 0008                209              bcs         carry          if causes carry, branch to carry message
+00001306  528A                     210              addq.l      #1, a2    increment address from 6000  ->  6001 ...
+00001308  5284                     211              add.l       #1, d4    increment i from 0 -> 1
+0000130A  60EA                     212              bra loop_2
+0000130C                           213  carry
+0000130C                           214        *simhalt
+0000130C  33C7 000013C6            215              move.w      d7, Addsum
+00001312  13FC 0001 000013C8       216              move.b   #1, CarryBit
+0000131A  43F9 000013C9            217              lea         carryMessage, a1
+00001320  103C 000E                218              move.b #14, d0
+00001324  4E4F                     219              trap  #15
+00001326  1239 000013C8            220              move.b     CarryBit, d1
+0000132C  103C 0003                221              move.b     #3, d0
+00001330  4E4F                     222              trap #15
+00001332  43F9 000013DF            223              lea     newSpace, a1
+00001338  103C 000E                224              move.b    #14, d0
+0000133C  4E4F                     225              trap     #15
+0000133E                           226              
+0000133E                           227              *simhalt
+0000133E                           228  
+0000133E                           229  messageSection        
+0000133E  43F9 000013E3            230          lea     memoryAddressMessage,  a1
+00001344  103C 000E                231          move.b    #14, d0
+00001348  4E4F                     232          trap     #15   
+0000134A  43F9 0000141A            233          lea      memAddMessCont, a1
+00001350  4E4F                     234          trap     #15
+00001352  700F                     235           moveq   #15,d0   task number 15 into D0
+00001354  7410                     236          moveq   #16,d2   base 16, hex
+00001356  2239 000013C2            237          move.l  addr1,d1   load address into D1
+0000135C  4E4F                     238          trap    #15   display address in D1.l in hex
+0000135E  43F9 000013DF            239          lea     newSpace, a1
+00001364  103C 000E                240          move.b    #14, d0
+00001368  4E4F                     241          trap     #15
+0000136A  43F9 0000143F            242          lea     addSumMessage,  a1
+00001370  103C 000E                243          move.b    #14, d0
+00001374  4E4F                     244          trap     #15   
+00001376  3239 000013C6            245          move.w     Addsum, d1
+0000137C  103C 0003                246          move.b     #3, d0
+00001380  4E4F                     247          trap       #15
+00001382                           248          
+00001382                           249  
+00001382                           250          
+00001382                           251              
+00001382                           252  ******** variables **********
+00001382= 50 6C 65 61 73 65 ...    253  startMessage     dc.b    'Please enter two hexidecimal values (test hex = FE @ $7005): ',CR,LF,0
+000013C2= 00000001                 254  addr1       dc.l 1
+000013C6= 0000                     255  Addsum      dc.w 0
+000013C8                           256  CarryBit     ds.b 1
+000013C9= 59 6F 75 20 68 61 ...    257  carryMessage     dc.b    'You had a carry bit: ',0
+000013DF= 20 0D 0A 00              258  newSpace      dc.b  ' ', CR, LF,0
+000013E3= 59 6F 75 72 20 70 ...    259  memoryAddressMessage  dc.b  'Your pattern was found at the below memory address. ',CR, LF,0 
+0000141A= 28 6F 72 20 77 69 ...    260  memAddMessCont        dc.b  '(or will show 6000 if not found) ', CR, LF,0
+0000143E= 01                       261  tempValue    dc.b   1
+0000143F= 41 64 64 73 75 6D ...    262  addSumMessage  dc.b   'Addsum value: ', 0
+0000144E                           263              end  start
+
+No errors detected
+No warnings generated
+
+
+SYMBOL TABLE INFORMATION
+Symbol-name         Value
+-------------------------
+ADDR1               13C2
+ADDSUM              13C6
+ADDSUMMESSAGE       143F
+CARRY               130C
+CARRYBIT            13C8
+CARRYMESSAGE        13C9
+CR                  D
+END_HW              8000
+LF                  A
+LOOP                12B2
+LOOP_2              12F6
+MATCH               12C2
+MEMADDMESSCONT      141A
+MEMORYADDRESSMESSAGE  13E3
+MESSAGESECTION      133E
+NEWSPACE            13DF
+NEXT                12D2
+NEXTCHAR            1156
+NO_MATCH            12CC
+PATTERN             A000
+START               1000
+STARTMESSAGE        1382
+STARTPATTERFINDING  1294
+START_HW            6000
+TEMPVALUE           143E
+X1                  102E
+X11                 1180
+X2                  1042
+X22                 1192
+X3                  1056
+X33                 11A4
+X4                  106A
+X44                 11B6
+X5                  107E
+X55                 11C8
+X6                  1092
+X66                 11DA
+X7                  10A6
+X77                 11EC
+X8                  10BA
+X88                 11FE
+X9                  10CE
+X99                 1210
+XA                  10E2
+XAA                 1224
+XB                  10F6
+XBB                 1238
+XC                  110A
+XCC                 124C
+XD                  111E
+XDD                 1260
+XE                  1132
+XEE                 1274
+XF                  1146
+XFF                 1288

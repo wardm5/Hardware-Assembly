@@ -1,0 +1,357 @@
+00004000 Starting Address
+Assembler used: EASy68K Editor/Assembler v5.16.01
+Created On: 4/30/2019 9:22:31 PM
+
+00000000                             1  *-----------------------------------------------------------
+00000000                             2  * Title      :   HW 2 - Question 4
+00000000                             3  * Written by :   Misha War
+00000000                             4  * Date       :   04/27/2019
+00000000                             5  * Description:   Converts Floating Point Hex and Provides Analysis
+00000000                             6  *-----------------------------------------------------------
+00000000                             7  
+00004000                             8     ORG   $4000
+00004000                             9  START:            ; first instruction of program
+00004000  43F9 00005000             10      LEA     MESSAGE1,A1 *Loads message into ad6dress register A1
+00004006  103C 000E                 11      MOVE.B  #14,D0      *Moves number 14 into data regiter D0
+0000400A  4E4F                      12      TRAP    #15         *Displays Message
+0000400C                            13     
+0000400C  43F9 000050A8             14      LEA     INPUT,A1   ; Where to store input string
+00004012  103C 0002                 15      MOVE.B  #2,D0       ; Read string
+00004016  4E4F                      16      TRAP    #15
+00004018                            17  
+00004018  43F9 0000503C             18      LEA     MESSAGE2,A1 *Loads message into address register A1
+0000401E  103C 000E                 19      MOVE.B  #14,D0      *Moves number 14 into data regiter D0
+00004022  4E4F                      20      TRAP    #15         *Displays Message
+00004024                            21  
+00004024                            22  *PRINT STRING FOR CONFIMATION
+00004024  43F9 000050A8             23      LEA     INPUT,A1   ; String to display
+0000402A  103C 000D                 24      MOVE.B  #13,D0      ; Display string with newline
+0000402E  4E4F                      25      TRAP    #15
+00004030                            26  
+00004030  41F9 000050A8             27      LEA INPUT, a0  * save the input into memory addres
+00004036                            28  **** FOR LOOP TO PASS THROUGH INPUT ****
+00004036  7800                      29      move.l  #0, d4          * counter
+00004038  7A08                      30      move.l  #8, d5          * size of INPUT (assuming correct input)
+0000403A  BA84                      31  LOOP_1    cmp.l d4,d5   *Do the comparison test (n < 8)
+0000403C  6700 01B6                 32      beq     next_code 
+00004040                            33      *{ Execute some other loop instructions}
+00004040  5204                      34      add.b #1,d4 *Increment the counter 
+00004042  1E18                      35      move.b  (a0)+, d7
+00004044                            36      *move.b  d1, d7
+00004044  BE3C 0030                 37      cmp.b   #$30, d7
+00004048  6600 0014                 38      BNE X1
+0000404C                            39  
+0000404C  173C 0000                 40      MOVE.B  #0, -(A3)
+00004050  173C 0000                 41      MOVE.B  #0, -(A3)
+00004054  173C 0000                 42      MOVE.B  #0, -(A3)
+00004058  173C 0000                 43      MOVE.B  #0, -(A3)
+0000405C  60DC                      44      bra LOOP_1
+0000405E                            45      
+0000405E  BE3C 0031                 46  X1  cmp.b   #$31, d7
+00004062  6600 0014                 47      bne x2 
+00004066  173C 0000                 48      MOVE.B  #0, -(A3)
+0000406A  173C 0000                 49      MOVE.B  #0, -(A3)
+0000406E  173C 0000                 50      MOVE.B  #0, -(A3)
+00004072  173C 0001                 51      MOVE.B  #1, -(A3)
+00004076  60C2                      52      bra LOOP_1
+00004078                            53      
+00004078  BE3C 0032                 54  X2  cmp.b   #$32, d7
+0000407C  6600 0014                 55      bne x3
+00004080                            56      *lea message4, a1
+00004080                            57      *move.b #14, d0
+00004080                            58      *trap #15    
+00004080  173C 0000                 59      MOVE.B  #0, -(A3)
+00004084  173C 0000                 60      MOVE.B  #0, -(A3)
+00004088  173C 0001                 61      MOVE.B  #1, -(A3)
+0000408C  173C 0000                 62      MOVE.B  #0, -(A3)
+00004090  60A8                      63      bra LOOP_1
+00004092                            64      
+00004092  BE3C 0033                 65  X3  cmp.b   #$33, d7
+00004096  6600 0014                 66      bne x4  
+0000409A  173C 0000                 67      MOVE.B  #0, -(A3)
+0000409E  173C 0000                 68      MOVE.B  #0, -(A3)
+000040A2  173C 0001                 69      MOVE.B  #1, -(A3)
+000040A6  173C 0001                 70      MOVE.B  #1, -(A3)
+000040AA  608E                      71      bra LOOP_1
+000040AC                            72      
+000040AC  BE3C 0034                 73  X4  cmp.b   #$34, d7
+000040B0  6600 0016                 74      bne x5 
+000040B4  173C 0000                 75      MOVE.B  #0,-(A3)
+000040B8  173C 0001                 76      MOVE.B  #1,-(A3)
+000040BC  173C 0000                 77      MOVE.B  #0,-(A3)
+000040C0  173C 0000                 78      MOVE.B  #0,-(A3)
+000040C4  6000 FF74                 79      bra LOOP_1
+000040C8                            80     
+000040C8  BE3C 0035                 81  X5  cmp.b   #$35, d7
+000040CC  6600 0016                 82      bne x6 
+000040D0  173C 0000                 83      MOVE.B  #0,-(A3)
+000040D4  173C 0001                 84      MOVE.B  #1,-(A3)
+000040D8  173C 0000                 85      MOVE.B  #0,-(A3)
+000040DC  173C 0001                 86      MOVE.B  #1,-(A3)
+000040E0  6000 FF58                 87      bra LOOP_1
+000040E4                            88      
+000040E4  BE3C 0036                 89  X6  cmp.b   #$36, d7
+000040E8  6600 0016                 90      bne x7 
+000040EC  173C 0000                 91      MOVE.B  #0,-(A3)
+000040F0  173C 0001                 92      MOVE.B  #1,-(A3)
+000040F4  173C 0001                 93      MOVE.B  #1,-(A3)
+000040F8  173C 0000                 94      MOVE.B  #0,-(A3)
+000040FC  6000 FF3C                 95      bra LOOP_1
+00004100                            96      
+00004100                            97      
+00004100  BE3C 0037                 98  X7  cmp.b   #$37, d7
+00004104  6600 0016                 99      bne x8 
+00004108  173C 0000                100      MOVE.B  #0,-(A3)
+0000410C  173C 0001                101      MOVE.B  #1,-(A3)
+00004110  173C 0001                102      MOVE.B  #1,-(A3)
+00004114  173C 0001                103      MOVE.B  #1,-(A3)
+00004118  6000 FF20                104      bra LOOP_1
+0000411C                           105      
+0000411C                           106      
+0000411C  BE3C 0038                107  X8  cmp.b   #$38, d7
+00004120  6600 0016                108      bne x9 
+00004124  173C 0001                109      MOVE.B  #1,-(A3)
+00004128  173C 0000                110      MOVE.B  #0,-(A3)
+0000412C  173C 0000                111      MOVE.B  #0,-(A3)
+00004130  173C 0000                112      MOVE.B  #0,-(A3)
+00004134  6000 FF04                113      bra LOOP_1
+00004138                           114      
+00004138  BE3C 0039                115  X9  cmp.b   #$39, d7
+0000413C  6600 0016                116      bne xA 
+00004140  173C 0001                117      MOVE.B  #1,-(A3)
+00004144  173C 0000                118      MOVE.B  #0,-(A3)
+00004148  173C 0000                119      MOVE.B  #0,-(A3)
+0000414C  173C 0001                120      MOVE.B  #1,-(A3)
+00004150  6000 FEE8                121      bra LOOP_1
+00004154                           122      
+00004154  BE3C 0041                123  XA  cmp.b   #$41, d7
+00004158  6600 0016                124      bne xB 
+0000415C  173C 0001                125      MOVE.B  #1,-(A3)
+00004160  173C 0000                126      MOVE.B  #0,-(A3)
+00004164  173C 0001                127      MOVE.B  #1,-(A3)
+00004168  173C 0000                128      MOVE.B  #0,-(A3)
+0000416C  6000 FECC                129      bra LOOP_1
+00004170                           130      
+00004170  BE3C 0042                131  XB  cmp.b   #$42, d7
+00004174  6600 0016                132      bne xC 
+00004178  173C 0001                133      MOVE.B  #1,-(A3)
+0000417C  173C 0000                134      MOVE.B  #0,-(A3)
+00004180  173C 0001                135      MOVE.B  #1,-(A3)
+00004184  173C 0001                136      MOVE.B  #1,-(A3)
+00004188  6000 FEB0                137      bra LOOP_1
+0000418C                           138      
+0000418C  BE3C 0043                139  XC  cmp.b   #$43, d7
+00004190  6600 0016                140      bne xD 
+00004194  173C 0001                141      MOVE.B  #1,-(A3)
+00004198  173C 0001                142      MOVE.B  #1,-(A3)
+0000419C  173C 0000                143      MOVE.B  #0,-(A3)
+000041A0  173C 0000                144      MOVE.B  #0,-(A3)
+000041A4  6000 FE94                145      bra LOOP_1
+000041A8                           146     
+000041A8  BE3C 0044                147  XD  cmp.b   #$44, d7
+000041AC  6600 0016                148      bne xE 
+000041B0  173C 0001                149      MOVE.B  #1,-(A3)
+000041B4  173C 0001                150      MOVE.B  #1,-(A3)
+000041B8  173C 0000                151      MOVE.B  #0,-(A3)
+000041BC  173C 0001                152      MOVE.B  #1,-(A3)
+000041C0  6000 FE78                153      bra LOOP_1
+000041C4                           154     
+000041C4  BE3C 0045                155  XE  cmp.b   #$45, d7
+000041C8  6600 0016                156      bne xF 
+000041CC  173C 0001                157      MOVE.B  #1,-(A3)
+000041D0  173C 0001                158      MOVE.B  #1,-(A3)
+000041D4  173C 0001                159      MOVE.B  #1,-(A3)
+000041D8  173C 0000                160      MOVE.B  #0,-(A3)
+000041DC  6000 FE5C                161      bra LOOP_1
+000041E0                           162      
+000041E0                           163  XF    
+000041E0                           164      *MOVE.B  #6, D0
+000041E0                           165      *TRAP #15
+000041E0  173C 0001                166      MOVE.B  #1,-(A3)
+000041E4  173C 0001                167      MOVE.B  #1,-(A3)
+000041E8  173C 0001                168      MOVE.B  #1,-(A3)
+000041EC  173C 0001                169      MOVE.B  #1,-(A3)
+000041F0  6000 FE48                170      bra LOOP_1 *Go back
+000041F4                           171      
+000041F4                           172      
+000041F4                           173  *********** LOOP THROUGH ARRAY IN A3 ******************
+000041F4                           174  next_code *{ Execute the instructions after the loop } 
+000041F4  123C 0000                175          move.b #0, d1  * bit                  
+000041F8  143C 0000                176          move.b #0, d2  * boolean value for mantissa
+000041FC  7600                     177          move.l #0, d3  actual value
+000041FE  7801                     178          move.l #1, d4  keep track of scale of the amount...
+00004200  1A3C 0000                179          move.b #0, d5  keep track if you reset numbers
+00004204  7C21                     180          move.l #33, d6  * go from 32 to 9 didgets 
+00004206  103C 0003                181  LOOP_2    MOVE.B #3,D0        ; trap task 3, display signed number from D1
+0000420A  5306                     182          SUB.B   #1,d6   * update int i
+0000420C  BC3C 0001                183          cmp.b #1, d6
+00004210  6700 008E                184          beq sign
+00004214                           185      
+00004214  BC3C 0009                186          cmp.b #9, d6
+00004218  6700 005C                187          beq turnOnExponetFlag
+0000421C  BA3C 0001                188          cmp.b  #1, d5
+00004220  6700 0038                189          beq   exponetSection
+00004224                           190      
+00004224  121B                     191          MOVE.B (A3)+,D1
+00004226                           192          *TRAP #15     display mantissa bit
+00004226  B43C 0001                193          cmp.b   #1, d2   * check if the flag is set to 1
+0000422A  6700 0018                194          beq checkBinaryBit  * if it is, then do other logic
+0000422E  B23C 0001                195          cmp.b   #1, d1   * else check to see if the bit currently is 1
+00004232  6700 0004                196          beq startProcess
+00004236  60CE                     197          bra LOOP_2
+00004238                           198          
+00004238                           199  startProcess
+00004238  143C 0001                200          move.b #1, d2
+0000423C  5283                     201          add.l    #1, d3
+0000423E  C9FC 0002                202          muls   #2, d4
+00004242  60C2                     203          bra LOOP_2
+00004244                           204  
+00004244                           205  checkBinaryBit        * check the bit at this location against the flag
+00004244  B23C 0001                206          cmp.b #1, d1   * check binary bit to 1
+00004248  6700 0008                207          beq secondProcess  * if it does equal to 1
+0000424C  C9FC 0002                208          muls   #2, d4   * else multiply the scale by 2
+00004250  60B4                     209          bra LOOP_2  * loop
+00004252                           210  
+00004252                           211  secondProcess
+00004252  D684                     212          add.l  d4, d3
+00004254  C9FC 0002                213          muls  #2, d4
+00004258  60AC                     214          bra LOOP_2
+0000425A                           215      
+0000425A                           216      
+0000425A                           217  exponetSection
+0000425A  103C 0003                218  LOOP_3  MOVE.B #3,D0
+0000425E  121B                     219          MOVE.B (A3)+,D1        
+00004260                           220          *TRAP #15   * display exponet bit
+00004260                           221          *if bit is 1, then add the multiplier to the value tracker
+00004260  B23C 0000                222          cmp.b  #0, d1
+00004264  6600 0008                223          bne startExProcess
+00004268  C9FC 0002                224          muls #2, d4
+0000426C  6098                     225          bra LOOP_2
+0000426E                           226          
+0000426E                           227  startExProcess
+0000426E  D684                     228          add.l d4,d3
+00004270  C9FC 0002                229          muls #2, d4
+00004274  6090                     230          bra LOOP_2    
+00004276                           231      
+00004276                           232  turnOnExponetFlag
+00004276                           233         *SIMHALT
+00004276  43F9 00005098            234          lea message5, a1
+0000427C  103C 000E                235          MOVE.B  #14,D0      *Moves number 14 into data regiter D0
+00004280  4E4F                     236          TRAP    #15         *Displays Message
+00004282  2203                     237          move.l d3, d1
+00004284  103C 0003                238          move.b #3, d0
+00004288  4E4F                     239          trap #15
+0000428A  43F9 0000506A            240          lea newSpace, a1
+00004290  103C 000E                241          MOVE.B  #14,D0      *Moves number 14 into data regiter D0
+00004294  4E4F                     242          TRAP    #15         *Displays Message
+00004296                           243          
+00004296  1A3C 0001                244          move.b #1, d5
+0000429A  7600                     245          move.l #0, d3  actual value
+0000429C  7801                     246          move.l #1, d4  keep track of scale of the amount...
+0000429E  60BA                     247          bra exponetSection
+000042A0                           248      
+000042A0                           249  
+000042A0                           250  sign        
+000042A0  43F9 0000508C            251          lea message4, a1        
+000042A6  103C 000E                252          MOVE.B  #14,D0      *Moves number 14 into data regiter D0
+000042AA  4E4F                     253          TRAP    #15         *Displays Message
+000042AC  2203                     254          move.l d3, d1
+000042AE  103C 0003                255          move.b #3, d0
+000042B2  4E4F                     256          trap #15
+000042B4  43F9 0000506A            257          lea newSpace, a1
+000042BA  103C 000E                258          MOVE.B  #14,D0      *Moves number 14 into data regiter D0
+000042BE  4E4F                     259          TRAP    #15         *Displays Message
+000042C0  121B                     260          MOVE.B (A3)+, D1 
+000042C2                           261          *move.b  (A3), d1
+000042C2                           262          *trap #15    show sign bit
+000042C2  B23C 0000                263          cmp.b  #0, d1
+000042C6  6700 0012                264          beq positive
+000042CA  43F9 0000507D            265          lea message3neg, a1
+000042D0  103C 000E                266          MOVE.B  #14,D0      *Moves number 14 into data regiter D0
+000042D4  4E4F                     267          TRAP    #15         *Displays Message
+000042D6  6000 0012                268          bra endOfProgram
+000042DA                           269  positive
+000042DA  43F9 0000506E            270          lea message3pos, a1
+000042E0  103C 000E                271          MOVE.B  #14,D0      *Moves number 14 into data regiter D0
+000042E4  4E4F                     272          TRAP    #15         *Displays Message
+000042E6  6000 0002                273          bra endOfProgram
+000042EA                           274  
+000042EA                           275  *  C0680000
+000042EA                           276  *  Sign bit: - 
+000042EA                           277  *  Exponent:128
+000042EA                           278  *  Mantissa: 13
+000042EA                           279      
+000042EA                           280  endOfProgram
+000042EA                           281      
+000042EA                           282  * Variables and Strings
+00005000                           283          ORG $5000 
+00005000  =0000000D                284  CR EQU $0D
+00005000  =0000000A                285  LF EQU $0A
+00005000                           286  
+00005000= 45 6E 74 65 72 20 ...    287  message1 dc.b 'Enter your hexidecimal number (please capitalize letters): ',0
+0000503C= 54 68 65 20 68 65 ...    288  message2 dc.b 'The hexidecimal that you entered was: ',0
+00005063= 74 65 73 74 20 30 00     289  message0 dc.b 'test 0',0
+0000506A= 20 0D 0A 00              290  newSpace dc.b ' ', CR, LF, 0
+0000506E= 53 69 67 6E 20 62 ...    291  message3pos dc.b 'Sign bit:  +', CR, LF, 0
+0000507D= 53 69 67 6E 20 62 ...    292  message3neg dc.b 'Sign bit:  -', CR, LF, 0
+0000508C= 45 78 70 6F 6E 65 ...    293  message4 dc.b    'Exponet:   ', 0
+00005098= 4D 61 6E 74 69 73 ...    294  message5 dc.b    'Mantissa:  ', 0
+000050A4= 01                       295  signBit  dc.b  1
+000050A5= 01                       296  exponent dc.b  1
+000050A6= 0001                     297  mantissa dc.w  1
+000050A8                           298           ds.w    0  ; force even address
+000050A8                           299  INPUT    ds.l    0  ; input string storage
+000050A8= 50                       300  array    dc.b  80
+000050A9                           301           END START
+
+No errors detected
+No warnings generated
+
+
+SYMBOL TABLE INFORMATION
+Symbol-name         Value
+-------------------------
+ARRAY               50A8
+CHECKBINARYBIT      4244
+CR                  D
+ENDOFPROGRAM        42EA
+EXPONENT            50A5
+EXPONETSECTION      425A
+INPUT               50A8
+LF                  A
+LOOP_1              403A
+LOOP_2              4206
+LOOP_3              425A
+MANTISSA            50A6
+MESSAGE0            5063
+MESSAGE1            5000
+MESSAGE2            503C
+MESSAGE3NEG         507D
+MESSAGE3POS         506E
+MESSAGE4            508C
+MESSAGE5            5098
+NEWSPACE            506A
+NEXT_CODE           41F4
+POSITIVE            42DA
+SECONDPROCESS       4252
+SIGN                42A0
+SIGNBIT             50A4
+START               4000
+STARTEXPROCESS      426E
+STARTPROCESS        4238
+TURNONEXPONETFLAG   4276
+X1                  405E
+X2                  4078
+X3                  4092
+X4                  40AC
+X5                  40C8
+X6                  40E4
+X7                  4100
+X8                  411C
+X9                  4138
+XA                  4154
+XB                  4170
+XC                  418C
+XD                  41A8
+XE                  41C4
+XF                  41E0
