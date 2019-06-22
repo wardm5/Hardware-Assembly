@@ -1,0 +1,52 @@
+00000400 Starting Address
+Assembler used: EASy68K Editor/Assembler v5.16.01
+Created On: 4/19/2019 11:28:41 PM
+
+00000000                             1  *-----------------------------------------------------------
+00000000                             2  * Title      :  HW1 Q4
+00000000                             3  * Written by :  Misha Ward
+00000000                             4  * Date       :  4/19/2019
+00000000                             5  * Description:  Program to move data around
+00000000                             6  *-----------------------------------------------------------
+00000000                             7  * like define in C
+00000000  =00004000                  8  addr1   equ     $4000
+00000000  =00004001                  9  addr2   equ     $4001
+00000000  =0000A7FF                 10  data2   equ     $A7FF
+00000000  =00005555                 11  data3   equ     $5555
+00000000  =00000000                 12  data4   equ     $0000
+00000000  =00001246                 13  data5   equ     4678
+00000000  =0000004F                 14  data6   equ     %01001111
+00000000  =00000017                 15  data7   equ     %00010111
+00000000                            16  
+00000000                            17  *--------- code section ----------
+00000400                            18      ORG    $400
+00000400  303C A7FF                 19  start       move.w #data2, d0   * load d0
+00000404  123C 004F                 20              move.b #data6, d1
+00000408  143C 0017                 21              move.b #data7, d2
+0000040C  363C 5555                 22              move.w #data3, d3
+00000410  307C 4000                 23              movea.w #addr1, a0  * load address register
+00000414  10C1                      24              move.b  d1, (a0)+   * transfer byte to memory
+00000416  10C2                      25              move.b  d2, (a0)+   *transfer second byte
+00000418  327C 4000                 26              movea.w  #addr1, a1 *load address
+0000041C  C751                      27              and.w   d3, (a1)    *logical AND
+0000041E                            28              
+0000041E  4EF8 0400                 29              jmp  start
+00000422                            30              
+00000422                            31              end $400
+
+No errors detected
+No warnings generated
+
+
+SYMBOL TABLE INFORMATION
+Symbol-name         Value
+-------------------------
+ADDR1               4000
+ADDR2               4001
+DATA2               A7FF
+DATA3               5555
+DATA4               0
+DATA5               1246
+DATA6               4F
+DATA7               17
+START               400

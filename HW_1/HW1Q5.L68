@@ -1,0 +1,72 @@
+00001000 Starting Address
+Assembler used: EASy68K Editor/Assembler v5.16.01
+Created On: 4/19/2019 11:07:46 PM
+
+00000000                             1  *-----------------------------------------------------------
+00000000                             2  * Title      :  HW1 5.3
+00000000                             3  * Written by :  Misha Ward
+00000000                             4  * Date       :  4/19/2019
+00000000                             5  * Description:  Program to add two user inputted numbers
+00000000                             6  *-----------------------------------------------------------
+00000000  =0000000D                  7  CR          EQU     $0d
+00000000  =0000000A                  8  LF          EQU     $0a
+00001000                             9  START       ORG $1000   
+00001000                            10  
+00001000                            11  *---------- Output Code ---------*
+00001000  43F9 00001054             12              LEA     Input1, a1   load input message 1
+00001006  303C 000E                 13              MOVE.W  #14, d0      move the input message to d0
+0000100A  4E4F                      14              TRAP    #15          show message
+0000100C                            15              
+0000100C                            16  *---------- Input Code ---------*
+0000100C  103C 0004                 17              MOVE.B  #4, d0       move input to d0
+00001010  4E4F                      18              TRAP    #15          show amount
+00001012  3401                      19              MOVE.W  d1, d2       move amount from d1 to d2
+00001014                            20              
+00001014                            21  *---------- Code for output ---------*
+00001014  43F9 0000106B             22              LEA     Input2, a1   load second input message
+0000101A  303C 000E                 23              MOVE.W  #14, d0      move message to d0
+0000101E  4E4F                      24              TRAP    #15          show message
+00001020                            25  
+00001020                            26  *---------- Code for input ---------*
+00001020  103C 0004                 27              MOVE.B  #4,d0        move input to d0
+00001024  4E4F                      28              TRAP    #15          show input
+00001026  D242                      29              ADD.W   d2,d1        add the two amounts in d2 with d2
+00001028  6900 0010                 30              BVS     OVER         determines if the v flag was activated for overflow
+0000102C  303C 0003                 31              MOVE    #3,d0        move amount to d0
+00001030  31C1 6000                 32              MOVE.W D1, $6000     move amount to $6000 address
+00001034  4E4F                      33              TRAP    #15          show amount
+00001036  4E72 2000                 34              STOP    #$2000       quit program
+0000103A                            35  
+0000103A                            36  *---------- Overflow ---------------*
+0000103A  43F9 00001084             37  OVER        LEA    OVERFLOW,a1   load overflow message to a1
+00001040  303C 000E                 38              MOVE.W #14,D0        move message to d0
+00001044  4E4F                      39              TRAP   #15           print message
+00001046  4E72 2000                 40              STOP    #$2000       stop program
+0000104A                            41  
+0000104A                            42  *---------- Halt Simulator ---------*   
+0000104A  303C 0009                 43      MOVE.W  #9,d0
+0000104E  4E4F                      44      TRAP    #15
+00001050                            45  
+00001050                            46  * Stop execution
+00001050  4E72 2000                 47      STOP    #$2000
+00001054                            48  
+00001054                            49  *------------- Variables --------------*
+00001054= 45 6E 74 65 72 20 ...     50  Input1      DC.B    'Enter a first number: ',0
+0000106B= 45 6E 74 65 72 20 ...     51  Input2      DC.B    'Enter a second number: ',0
+00001084= 5468 6520 7661 6...       52  OVERFLOW    DC.W    'The values you entered caused an overflow condition.',0
+000010BA                            53      END START   end of program with start address specified
+
+No errors detected
+No warnings generated
+
+
+SYMBOL TABLE INFORMATION
+Symbol-name         Value
+-------------------------
+CR                  D
+INPUT1              1054
+INPUT2              106B
+LF                  A
+OVER                103A
+OVERFLOW            1084
+START               1000
